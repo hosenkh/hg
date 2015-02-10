@@ -1,0 +1,19 @@
+{
+  "name": "hg",
+  "version": "0.0.0",
+  "description": "hosein's global library",
+  "main": "index.js",
+  "dependencies": {
+    "grunt": "~0.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hg",
+    "utilities"
+  ],
+  "author": "hosenkh@gmail.com",
+  "license": "MIT"
+}
