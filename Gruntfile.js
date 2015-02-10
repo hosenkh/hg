@@ -31,11 +31,11 @@ module.exports = function(grunt) { 'use strict';
         dest: 'dist/hg.js',
         nonull: true
       },
-      // htmls: {
-      //   src: ['src/directives/*.html'],
-      //   dest: 'dist/qadatona-editor-template.html',
-      //   nonull: true
-      // },
+      htmls: {
+        src: ['demo/demo.html'],
+        dest: 'dist/index.html',
+        nonull: true
+      },
       libs: {
         options: {
           // banner: '// Bundle of all qEditor needed libs (angular.js & ...)\n',
@@ -45,23 +45,24 @@ module.exports = function(grunt) { 'use strict';
         src: [
           'components/angular/angular.min.js',
           'components/angular-resource/angular-resource.min.js',
-          'components/angular-sanitize/angular-sanitize.min.js'
+          'components/angular-route/angular-route.min.js',
+          'components/angular-animate/angular-animate.min.js'
         ],
         dest: 'dist/jslibs-bundle.min.js',
         nonull: true
       },
       pack: {
         options: {
-          banner: banner+'\n//All scripts in one packed file.',
+          // banner: banner+'\n//All scripts in one packed file.',
           nonull: true,
           stripBanners: true,
           separator: scriptSeparator
         },
         src: [
           'dist/jslibs-bundle.min.js',
-          'dist/qadatona-editor.min.js'
+          'dist/hg.js'
         ],
-        dest: 'dist/qadatona-editor-pack.min.js',
+        dest: 'dist/hg-pack.min.js',
         nonull: true
       }
     },
@@ -69,10 +70,10 @@ module.exports = function(grunt) { 'use strict';
     uglify: {
       build: {
         options: {
-          banner: banner
+          // banner: banner
         },
         files: {
-          'dist/qadatona-editor.min.js': 'dist/qadatona-editor.js'
+          'dist/hg-pack.min.js': 'dist/hg-pack.js'
         }
       }
     },
@@ -80,22 +81,23 @@ module.exports = function(grunt) { 'use strict';
     stylus: {
       theme: {
         options: {
-          banner: banner,
+          // banner: banner,
           compress: false
         },
         files: {
-          'dist/qadatona-editor.css': 'themes/'+theme+'/index.styl'
+          'dist/demo.css': 'demo/demo.styl',
+          'dist/hgTemplates.css': 'style/hgTemplates.styl'
         }
       },
-      theme_min: {
-        options: {
-          banner: banner,
-          compress: true
-        },
-        files: {
-          'dist/qadatona-editor.min.css': 'themes/'+theme+'/index.styl'
-        }
-      }
+      // theme_min: {
+      //   options: {
+      //     banner: banner,
+      //     compress: true
+      //   },
+      //   files: {
+      //     'dist/qadatona-editor.min.css': 'themes/'+theme+'/index.styl'
+      //   }
+      // }
     },
 
     watch: {
@@ -115,13 +117,22 @@ module.exports = function(grunt) { 'use strict';
       },
 
       styles: {
-        files: ['themes/**/*.styl', 'themes/**/*.css'],
+        files: ['style/hgTemplates.styl'],
         tasks: ['stylus']
       },
 
       htmls: {
         files: ['src/**/*.html'],
         tasks: ['concat:htmls']
+      }
+    },
+
+    serve: {
+      options: {
+        serve: {
+          'path': 'dist'
+        },
+        'port':8000
       }
     }
 
@@ -131,11 +142,13 @@ module.exports = function(grunt) { 'use strict';
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-stylus');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-serve');
 
   grunt.registerTask('build', ['concat:main', 'concat:htmls', 'uglify', 'stylus']);
   grunt.registerTask('pack', ['concat:libs', 'concat:pack']);
 
   grunt.registerTask('default', ['build', 'pack']);
-  grunt.registerTask('dev', ['default', 'watch']);
+  // grunt.registerTask('dev', ['default', 'watch']);
+  grunt.registerTask('dev', ['default', 'serve']);
 
 };
